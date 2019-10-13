@@ -2,42 +2,40 @@
 let x_vals = [];
 let y_vals = [];
 let dragging = false;
-
 // Defining Variables for the polynomial equation y = ax + b
 let a, b;
-
-const learningRate = 0.5;
+// Defining learning rate
+const learningRate = 0.2;
+// Defining optimizer
 const optimizer = tf.train.adam(learningRate);
-
+// Initial setup function
 function setup() {
 	createCanvas(400, 400);
 	a = tf.variable(tf.scalar(random(-1, 1)));
 	b = tf.variable(tf.scalar(random(-1, 1)));
 }
-
+// Loss function |(y-x)^2|
 function loss(pred, labels) {
 	return pred
 		.sub(labels)
 		.square()
 		.mean();
 }
-
+// Prediction function: predicting the curve having the polynomial equation relationship
 function predict(x) {
 	const xs = tf.tensor1d(x);
 	// y = ax + b
 	const ys = xs.mul(a).add(b);
 	return ys;
 }
-
 // Mouse actions functions
 function mousePressed() {
 	dragging = true;
 }
-
 function mouseReleased() {
 	dragging = false;
 }
-
+// P5.js draw function, runs whenever we do mousePress somewhere in canvas
 function draw() {
 	if (dragging) {
 		let x = map(mouseX, 0, width, -1, 1);
@@ -54,7 +52,6 @@ function draw() {
 	}
 
 	background(0);
-
 	stroke(255);
 	strokeWeight(8);
 	for (let i = 0; i < x_vals.length; i++) {
